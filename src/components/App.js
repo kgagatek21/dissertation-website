@@ -2,6 +2,7 @@ import React from "react";
 import Signup from "./Signup";
 import { Container } from "react-bootstrap";
 import {AuthProvider} from "../contexts/AuthContext";
+import {FirestoreProvider} from "../contexts/FirestoreContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./Dashboard";
 import Login from "./Login";
@@ -23,26 +24,28 @@ function App() {
         <div className="w-100" >
           <Router>
             <AuthProvider>
-              <Routes>
-                <Route path="/signup" element={<Signup/>} />
-                <Route exact path='/' element={<PrivateRoute/>}>
-                  <Route exact path='/' element={<Menu/>}/>
-                </Route>
-                <Route exact path='/dashboard' element={<PrivateRoute/>}>
-                  <Route exact path='/dashboard' element={<Dashboard/>}/>
-                </Route>
-                <Route exact path='/update-profile' element={<PrivateRoute/>}>
-                  <Route exact path='/update-profile' element={<UpdateProfile/>}/>
-                </Route>
-                <Route exact path='/account' element={<PrivateRoute/>}>
-                  <Route exact path='/account' element={<Account/>}/>
-                </Route>
-                <Route exact path='/add-plant' element={<PrivateRoute/>}>
-                  <Route exact path='/add-plant' element={<AddPlant/>}/>
-                </Route>
-                <Route path="/login" element={<Login/>} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-              </Routes>
+              <FirestoreProvider>
+                <Routes>
+                  <Route path="/signup" element={<Signup/>} />
+                  <Route exact path='/' element={<PrivateRoute/>}>
+                    <Route exact path='/' element={<Menu/>}/>
+                  </Route>
+                  <Route exact path='/dashboard' element={<PrivateRoute/>}>
+                    <Route exact path='/dashboard' element={<Dashboard/>}/>
+                  </Route>
+                  <Route exact path='/update-profile' element={<PrivateRoute/>}>
+                    <Route exact path='/update-profile' element={<UpdateProfile/>}/>
+                  </Route>
+                  <Route exact path='/account' element={<PrivateRoute/>}>
+                    <Route exact path='/account' element={<Account/>}/>
+                  </Route>
+                  <Route exact path='/add-plant' element={<PrivateRoute/>}>
+                    <Route exact path='/add-plant' element={<AddPlant/>}/>
+                  </Route>
+                  <Route path="/login" element={<Login/>} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
+                </Routes>
+              </FirestoreProvider>
             </AuthProvider>
           </Router>
           

@@ -40,9 +40,11 @@
 // }
 
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Alert, Button, Card, CardGroup } from 'react-bootstrap'
 import NavbarComp from './NavbarComp'
+import { useFirestore } from '../contexts/FirestoreContext'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function Dashboard() {
   const plant = [
@@ -71,15 +73,35 @@ export default function Dashboard() {
     "img": 'plant_2.png'
   }]
 
+  const [listing, setListing] = useState()
+
+  const { getPlants } = useFirestore()
+  const { currentUser } = useAuth()
+
+  useEffect(() => {
+    const fetchData = async () => {
+        const querySnapshot = await getPlants(currentUser.uid);
+        const json = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+        setListing(json);
+        console.log(listing)
+    };
+
+    fetchData();
+}, []);
+
+
   return (
     <>
       <NavbarComp />
       <div className='row'>
-        {plant.map((variant) => (
+        {listing.map((variant) => (
           <div className='col-md-3'>
             <CardGroup>
               <Card  className='mb-3 mt-3'>
-                <Card.Img variant="top" src={require("../images/" + variant.img)} />
+                <Card.Img variant="top" src={require("../images/plant_1.png")} />
                 <Card.Body>
                   <Card.Title>{variant.name}</Card.Title>
                   <Card.Text>
