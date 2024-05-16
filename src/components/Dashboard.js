@@ -42,14 +42,9 @@
 
 import React, { useState } from 'react'
 import { Alert, Button, Card, CardGroup } from 'react-bootstrap'
-
+import NavbarComp from './NavbarComp'
 
 export default function Dashboard() {
-  const plants = [
-    "../images/plant_2.jpg",
-
-  ]
-
   const plant = [
   {
     "name": "Monstera",
@@ -58,27 +53,49 @@ export default function Dashboard() {
   {
     "name": "other plant",
     "img": 'plant_2.png'
+  },
+  {
+    "name": "other plant",
+    "img": 'plant_2.png'
+  },
+  {
+    "name": "other plant",
+    "img": 'plant_2.png'
+  },
+  {
+    "name": "other plant",
+    "img": 'plant_2.png'
+  },
+  {
+    "name": "other plant",
+    "img": 'plant_2.png'
   }]
 
   return (
-    plant.map((variant) => (
-      <CardGroup>
-        <Card style={{ width: '18rem' }} 
-        key="dark"
-        className="mb-2"
-        >
-        <Card.Img variant="top" src={require("../images/" + variant.img)} />
-        <Card.Body>
-          <Card.Title>Nice Plant</Card.Title>
-          <Card.Text>
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
-          </Card.Text>
-          <Button variant="primary">Go somewhere</Button>
-        </Card.Body>
-        </Card>
-      </CardGroup>
-    )
-  ))
+    <>
+      <NavbarComp />
+      <div className='row'>
+        {plant.map((variant) => (
+          <div className='col-md-3'>
+            <CardGroup>
+              <Card  className='mb-3 mt-3'>
+                <Card.Img variant="top" src={require("../images/" + variant.img)} />
+                <Card.Body>
+                  <Card.Title>{variant.name}</Card.Title>
+                  <Card.Text>
+                    Some quick example text to build on the card title and make up the
+                    bulk of the card's content.
+                  </Card.Text>
+                  <Button variant="primary">Settings</Button>
+                </Card.Body>
+              </Card>
+            </CardGroup>
+          </div>
+        ))}
+      </div>
+    </>
+    
+      
+  )
 }
 

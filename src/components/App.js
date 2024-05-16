@@ -10,6 +10,8 @@ import ForgotPassword from "./ForgotPassword";
 import UpdateProfile from "./UpdateProfile";
 import Account from "./Account";
 import Menu from "./Menu"
+import Navbar from "./NavbarComp";
+import AddPlant from "./AddPlant";
 
 function App() {
   return (
@@ -18,7 +20,7 @@ function App() {
         className="d-flex align-items-center justify-content-center"
         style={{ minHeight: "100vh"}}
       >
-        <div className="w-100" style={{ maxWidth: '400px'}}>
+        <div className="w-100" >
           <Router>
             <AuthProvider>
               <Routes>
@@ -34,6 +36,9 @@ function App() {
                 </Route>
                 <Route exact path='/account' element={<PrivateRoute/>}>
                   <Route exact path='/account' element={<Account/>}/>
+                </Route>
+                <Route exact path='/add-plant' element={<PrivateRoute/>}>
+                  <Route exact path='/add-plant' element={<AddPlant/>}/>
                 </Route>
                 <Route path="/login" element={<Login/>} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
