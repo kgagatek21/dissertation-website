@@ -73,24 +73,29 @@ export default function Dashboard() {
     "img": 'plant_2.png'
   }]
 
-  const [listing, setListing] = useState()
+  const [listing, setListing] = useState([])
 
   const { getPlants } = useFirestore()
   const { currentUser } = useAuth()
 
   useEffect(() => {
-    const fetchData = async () => {
+      const fetchData = async () => {
         const querySnapshot = await getPlants(currentUser.uid);
         const json = querySnapshot.docs.map(doc => ({
             id: doc.id,
             ...doc.data()
         }));
-        setListing(json);
-        console.log(listing)
-    };
+        
+        setListing(json); // has a delay
+        // console.log(listing)
+        
+        
+      };
 
     fetchData();
-}, []);
+    
+    
+  }, [listing]);
 
 
   return (

@@ -43,7 +43,8 @@ export function FirestoreProvider({ children }) {
 
   function getPlants(userID){
     const colRefPlants = collection(db, 'plants')
-    const q = query(colRefPlants, where("ownerID", "==", {userID}))
+    const q = query(colRefPlants, where('ownerID', '==', '' + userID)) // no idea why but where() would not accept {userID}, so had to do a work around
+    // console.log(userID)
     return getDocs(q)
   }
   
