@@ -28,18 +28,6 @@ export default function Dashboard() {
 
   }, []);
 
-    // async function getImgUrl(plantTypeID){
-    //   await getPlantType(plantTypeID).then((doc) => {
-    //     const json = doc.data().imgUrl
-    //     // console.log(plantType)
-    //     // return String(doc.data().imgUrl)
-    //     return doc.data().imgUrl
-    //   })
-    //   setPlantType(json)
-      
-    // }
-  
-  
   return (
     <>
       <NavbarComp />
