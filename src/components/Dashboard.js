@@ -48,32 +48,6 @@ import { useAuth } from '../contexts/AuthContext'
 import { json } from 'react-router-dom'
 
 export default function Dashboard() {
-  const plant = [
-  {
-    "name": "Monstera",
-    "img": 'plant_1.png'
-  },
-  {
-    "name": "other plant",
-    "img": 'plant_2.png'
-  },
-  {
-    "name": "other plant",
-    "img": 'plant_2.png'
-  },
-  {
-    "name": "other plant",
-    "img": 'plant_2.png'
-  },
-  {
-    "name": "other plant",
-    "img": 'plant_2.png'
-  },
-  {
-    "name": "other plant",
-    "img": 'plant_2.png'
-  }]
-
   const [plants, setPlants] = useState([])
   const [plantType, setPlantType] = useState('')
 
@@ -113,17 +87,11 @@ export default function Dashboard() {
       <NavbarComp />
       <div className='row'>
         {plants.map((plant) => ( 
-          
+
           <div className='col-md-3'>
             <CardGroup>
               <Card  className='mb-3 mt-3'>
-               
-                  
                   <Card.Img variant="top" src={plant.imgUrl} />
-                    
-
-                 
-                    
                 <Card.Body>
                   <Card.Title>{plant.name}</Card.Title>
                   <Card.Text>{plant.description}</Card.Text>
