@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { db } from '../firebase'
-// import { useAuth } from './AuthContext' 
+import React, { useContext, useEffect, useState } from 'react';
+import { db } from '../firebase';
+import { storage } from '../firebase';
 import {
     collection, 
     doc,
@@ -11,7 +11,12 @@ import {
     query, 
     where,
     onSnapshot
-  }from 'firebase/firestore'
+}from 'firebase/firestore';
+import{ 
+    ref,
+    uploadBytes, 
+    getDownloadURL
+} from 'firebase/storage';
 
 const FirestoreContext = React.createContext()
 
@@ -21,9 +26,31 @@ export function useFirestore() {
 
 export function FirestoreProvider({ children }) {
 //   const [ currentUser ] = useAuth()
+    const [url, setUrl] = useState();
 
 
-  function addPlant(name, plantTypeId, customSchedule, ownerID) {
+    function uploadStorageImg(img){
+        const storageRef = ref(storage, 'plants/' + img.name);
+        uploadBytes(storageRef, img).then((snapshot) => {
+            // console.log('Uploaded a blob or file!');
+
+            getDownloadURL(snapshot.ref).then((downloadURL) => {
+                console.log('File download URL:', downloadURL)
+                setUrl(downloadURL)
+                console.log("state of url inside firestore context: " + url)
+            });
+        })
+
+        if(url === undefined){
+            console.log("url is undefined")
+        }else {
+            
+            return url
+        }
+
+    }
+
+  function addPlant(name, plantTypeId, customSchedule, ownerID, url) {
     const colRefPlants = collection(db, 'plants')
     return addDoc(colRefPlants, {
         name: name,
@@ -33,7 +60,8 @@ export function FirestoreProvider({ children }) {
         isAirTooHumid: false,
         isCustomSchedule: customSchedule,
         ownerID: ownerID,      
-        createdAt: serverTimestamp()
+        createdAt: serverTimestamp(),
+        imgUrl: url
       })
   }
 
@@ -60,7 +88,8 @@ export function FirestoreProvider({ children }) {
     addPlant,
     fetchPlantTypes,
     getPlants,
-    getPlantType
+    getPlantType,
+    uploadStorageImg
   }
     return (
     <FirestoreContext.Provider value={value}>

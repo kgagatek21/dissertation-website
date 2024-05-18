@@ -12,7 +12,7 @@ export default function AddPlant() {
     const customScheduleRef = useRef()
 
     const  {signup, currentUser}  = useAuth()
-    const  {addPlant, fetchPlantTypes}  = useFirestore()
+    const  {addPlant, fetchPlantTypes, uploadStorageImg}  = useFirestore()
 
     const [error, setError] = useState('')
     const [message, setMessage] = useState('')
@@ -20,6 +20,8 @@ export default function AddPlant() {
     const [loading, setLoading] = useState(false)
     const [isSwitchChecked, setIsSwitchChecked] = useState(false);
     const [listing, setListing] = useState([])
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [imgUrl, setImgUrl] = useState('');
 
     
 
@@ -46,18 +48,10 @@ export default function AddPlant() {
     }, []);
 
 
-        // await fetchPlantTypes().then((snapshot) => {
-        //     let plantTypes = []
-        //     snapshot.docs.forEach((doc) => {
-        //       plantTypes.push({ ...doc.data(), id: doc.id })
-        //     })
-        //     console.log(plantTypes)
-        //     return plantTypes
-        //   })
-        //   .catch(err => {
-        //     console.log(err.message)
-        // })
     
+    const handleFileChange = (e) => {
+        setSelectedFile(e.target.files[0]);
+    };
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -66,15 +60,36 @@ export default function AddPlant() {
             setError('')
             setMessage('')
             setLoading(true)
-            await addPlant(
+            setImgUrl('')
+            try{
+                var temp = await uploadStorageImg(selectedFile)
+                console.log("temp: " + temp)
+                setImgUrl(temp)
+                
+
+            }catch (err) {
+                console.log(err.message)
+            }
+            
+            console.log("imgUrl: " + imgUrl)
+            let docRef = await addPlant(
                 nicknameRef.current.value, 
                 plantTypeRef.current.value,
                 customScheduleRef.current.value,
-                currentUser.uid
+                currentUser.uid,
+                imgUrl
                 )
+            console.log(docRef.id)
             setMessage('Success, redirecting to dashboard')
             navigate("/dashboard")
             // await addPlant("biig", "PJhNjTUmWItjkWRLyqhJ", false)
+                
+
+                
+                
+            
+        
+
             
         } catch (err) {
             setError('Failed to add a plant')
@@ -127,6 +142,10 @@ export default function AddPlant() {
                             <option value="2">Once a week</option>
                             <option value="3">Once every two weeks</option>
                         </Form.Select>
+                    </Form.Group>
+                    <Form.Group controlId="formFile" className="mb-3">
+                        <Form.Label>Upload Your Plant Image (Only '.png' files accepted)</Form.Label>
+                        <Form.Control onChange={handleFileChange} accept='.png' type="file" />
                     </Form.Group>
                     
                     <Button disabled={loading} className='w-100' type='submit'>Add</Button>
