@@ -3,6 +3,8 @@ import { db } from '../firebase'
 // import { useAuth } from './AuthContext' 
 import {
     collection, 
+    doc,
+    getDoc,
     addDoc, 
     serverTimestamp,
     getDocs,
@@ -39,6 +41,11 @@ export function FirestoreProvider({ children }) {
     const colRefPlantTypes = collection(db, 'plantTypes')
     return getDocs(colRefPlantTypes)
   }
+
+  function getPlantType(typeID){ 
+    const docRef = doc(db, 'plantTypes', typeID)
+    return getDoc(docRef)
+  }
   
 
   function getPlants(userID){
@@ -52,7 +59,8 @@ export function FirestoreProvider({ children }) {
   const value = { 
     addPlant,
     fetchPlantTypes,
-    getPlants
+    getPlants,
+    getPlantType
   }
     return (
     <FirestoreContext.Provider value={value}>

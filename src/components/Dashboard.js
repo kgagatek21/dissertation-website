@@ -45,6 +45,7 @@ import { Alert, Button, Card, CardGroup } from 'react-bootstrap'
 import NavbarComp from './NavbarComp'
 import { useFirestore } from '../contexts/FirestoreContext'
 import { useAuth } from '../contexts/AuthContext'
+import { json } from 'react-router-dom'
 
 export default function Dashboard() {
   const plant = [
@@ -73,9 +74,10 @@ export default function Dashboard() {
     "img": 'plant_2.png'
   }]
 
-  const [listing, setListing] = useState([])
+  const [plants, setPlants] = useState([])
+  const [plantType, setPlantType] = useState('')
 
-  const { getPlants } = useFirestore()
+  const { getPlants, getPlantType, fethPlantTypes } = useFirestore()
   const { currentUser } = useAuth()
 
   useEffect(() => {
@@ -85,34 +87,46 @@ export default function Dashboard() {
             id: doc.id,
             ...doc.data()
         }));
-        
-        setListing(json); // has a delay
-        // console.log(listing)
-        
-        
-      };
 
-    fetchData();
-    
-    
-  }, [listing]);
+        setPlants(json); 
+        // console.log(plants)
+      }
 
+      fetchData();
 
+  }, []);
+
+    // async function getImgUrl(plantTypeID){
+    //   await getPlantType(plantTypeID).then((doc) => {
+    //     const json = doc.data().imgUrl
+    //     // console.log(plantType)
+    //     // return String(doc.data().imgUrl)
+    //     return doc.data().imgUrl
+    //   })
+    //   setPlantType(json)
+      
+    // }
+  
+  
   return (
     <>
       <NavbarComp />
       <div className='row'>
-        {listing.map((variant) => (
+        {plants.map((plant) => ( 
+          
           <div className='col-md-3'>
             <CardGroup>
               <Card  className='mb-3 mt-3'>
-                <Card.Img variant="top" src={require("../images/plant_1.png")} />
+               
+                  
+                  <Card.Img variant="top" src={plant.imgUrl} />
+                    
+
+                 
+                    
                 <Card.Body>
-                  <Card.Title>{variant.name}</Card.Title>
-                  <Card.Text>
-                    Some quick example text to build on the card title and make up the
-                    bulk of the card's content.
-                  </Card.Text>
+                  <Card.Title>{plant.name}</Card.Title>
+                  <Card.Text>{plant.description}</Card.Text>
                   <Button variant="primary">Settings</Button>
                 </Card.Body>
               </Card>
