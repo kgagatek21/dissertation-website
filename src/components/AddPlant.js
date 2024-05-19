@@ -4,7 +4,12 @@ import { useAuth } from '../contexts/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 import NavbarComp from './NavbarComp'
 import { useFirestore } from '../contexts/FirestoreContext'
-
+import { storage } from '../firebase'
+import{ 
+    ref,
+    uploadBytes, 
+    getDownloadURL
+} from 'firebase/storage';
 
 export default function AddPlant() {
     const nicknameRef = useRef()
@@ -12,7 +17,7 @@ export default function AddPlant() {
     const customScheduleRef = useRef()
 
     const  {signup, currentUser}  = useAuth()
-    const  {addPlant, fetchPlantTypes, uploadStorageImg}  = useFirestore()
+    const  {addPlant, fetchPlantTypes}  = useFirestore()
 
     const [error, setError] = useState('')
     const [message, setMessage] = useState('')
@@ -21,7 +26,6 @@ export default function AddPlant() {
     const [isSwitchChecked, setIsSwitchChecked] = useState(false);
     const [listing, setListing] = useState([])
     const [selectedFile, setSelectedFile] = useState(null);
-    const [imgUrl, setImgUrl] = useState('');
 
     
 
@@ -51,52 +55,67 @@ export default function AddPlant() {
     
     const handleFileChange = (e) => {
         setSelectedFile(e.target.files[0]);
+      
     };
 
-    async function handleSubmit(e) {
+    function returnToDashboard(){
+        navigate("/dashboard")
+
+    }
+
+
+    function handleSubmit(e) {
         e.preventDefault()
        
         try{
             setError('')
             setMessage('')
             setLoading(true)
-            setImgUrl('')
-            try{
-                var temp = await uploadStorageImg(selectedFile)
-                console.log("temp: " + temp)
-                setImgUrl(temp)
-                
 
-            }catch (err) {
+            const randomText = Math.random().toString(36).substring(2,7)
+            const storageRef = ref(storage, 'plants/' + randomText + "_" + selectedFile.name);
+            uploadBytes(storageRef, selectedFile).then((snapshot) => {
+                // console.log('Uploaded a blob or file!');
+    
+                getDownloadURL(snapshot.ref).then((downloadURL) => {
+                    // setUrl(downloadURL)
+                    // console.log("state of url inside firestore context: " + url)
+                    if(downloadURL === undefined){
+                        console.log("downloadURL is undefined")
+                    }else {
+                        console.log("nickname ref: " + nicknameRef.current.value)
+                        console.log("customScheduleRef ref: " + customScheduleRef.current.value)
+                        console.log("plantTypeRef ref: " + plantTypeRef.current.value)
+                        console.log("current user: " + currentUser.id)
+                        console.log('File download URL:', downloadURL)
+                        addPlant(
+                            nicknameRef.current.value, 
+                            plantTypeRef.current.value,
+                            customScheduleRef.current.value,
+                            currentUser.uid,
+                            downloadURL
+                        ).then((doc) => {
+                            console.log("New doc id: " + doc.id)
+                        }).catch((err) => {
+                            console.log("New doc error" + err.message)
+                        })
+                    }
+                });
+            })
+            .catch((err) => {
                 console.log(err.message)
-            }
-            
-            console.log("imgUrl: " + imgUrl)
-            let docRef = await addPlant(
-                nicknameRef.current.value, 
-                plantTypeRef.current.value,
-                customScheduleRef.current.value,
-                currentUser.uid,
-                imgUrl
-                )
-            console.log(docRef.id)
-            setMessage('Success, redirecting to dashboard')
-            navigate("/dashboard")
-            // await addPlant("biig", "PJhNjTUmWItjkWRLyqhJ", false)
-                
-
-                
-                
-            
+            })
         
-
-            
+            setMessage('Success, redirecting to dashboard')
+            // navigate("/dashboard")
+               
         } catch (err) {
             setError('Failed to add a plant')
             console.log(err.message)
         }
         setLoading(false)
     }
+
 
   return (
     <>
@@ -148,7 +167,9 @@ export default function AddPlant() {
                         <Form.Control onChange={handleFileChange} accept='.png' type="file" />
                     </Form.Group>
                     
-                    <Button disabled={loading} className='w-100' type='submit'>Add</Button>
+                    <Button disabled={loading} className='w-100 mb-3' type='submit'>Add</Button>
+                    <Button disabled={loading} className='w-100 mb-3' onClick={returnToDashboard}>Return to Dashboard</Button>
+
                 </Form>
             </Card.Body>
         </Card>

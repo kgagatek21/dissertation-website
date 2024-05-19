@@ -29,24 +29,26 @@ export function FirestoreProvider({ children }) {
     const [url, setUrl] = useState();
 
 
-    function uploadStorageImg(img){
-        const storageRef = ref(storage, 'plants/' + img.name);
-        uploadBytes(storageRef, img).then((snapshot) => {
+    async function uploadStorageImg(img){
+        const randomText = Math.random().toString(36).substring(2,7)
+        const storageRef = ref(storage, 'plants/' + randomText + "_" + img.name);
+        await uploadBytes(storageRef, img).then((snapshot) => {
             // console.log('Uploaded a blob or file!');
 
             getDownloadURL(snapshot.ref).then((downloadURL) => {
                 console.log('File download URL:', downloadURL)
-                setUrl(downloadURL)
-                console.log("state of url inside firestore context: " + url)
+                // setUrl(downloadURL)
+                // console.log("state of url inside firestore context: " + url)
+                if(downloadURL === undefined){
+                    console.log("downloadURL is undefined")
+                }else {
+                    console.log("Returning downloadURL")
+                    return downloadURL
+                }
             });
         })
 
-        if(url === undefined){
-            console.log("url is undefined")
-        }else {
-            
-            return url
-        }
+        
 
     }
 
