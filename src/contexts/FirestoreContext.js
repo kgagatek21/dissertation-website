@@ -10,7 +10,7 @@ import {
     getDocs,
     query, 
     where,
-    onSnapshot
+    deleteDoc
 }from 'firebase/firestore';
 import{ 
     ref,
@@ -84,6 +84,11 @@ export function FirestoreProvider({ children }) {
     // console.log(userID)
     return getDocs(q)
   }
+
+  function deletePlant(plantID) {
+    const docRef = doc(db, 'plants', plantID)
+    return deleteDoc(docRef)
+  }
   
 
   const value = { 
@@ -91,7 +96,8 @@ export function FirestoreProvider({ children }) {
     fetchPlantTypes,
     getPlants,
     getPlantType,
-    uploadStorageImg
+    uploadStorageImg,
+    deletePlant
   }
     return (
     <FirestoreContext.Provider value={value}>

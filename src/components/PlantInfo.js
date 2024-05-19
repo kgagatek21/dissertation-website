@@ -8,7 +8,7 @@ import NavbarComp from './NavbarComp'
 
 export default function PlantInfo() {
     const  {signup, currentUser}  = useAuth()
-    const { getPlantType } = useFirestore()
+    const { getPlantType, deletePlant } = useFirestore()
 
 
     const [error, setError] = useState('')
@@ -94,6 +94,15 @@ export default function PlantInfo() {
         setLoading(false)
     }
 
+    function handleDeletePlant(plantID){
+        if(window.confirm("Are you sure you want to delete this plant ?")){
+            deletePlant(plantID).then((res) => {
+                navigate("/dashboard")
+            })
+        }
+        
+    }
+
   return (
     <>
         <NavbarComp className="mb-5"/>
@@ -128,7 +137,7 @@ export default function PlantInfo() {
                         <Form.Label className='mb-3'>Light Intensity: {lightIntensity}</Form.Label>
                     </Form.Group>
                     <Button disabled={loading} className='w-100 mb-3' type='submit'>Return to Dashboard</Button>
-                    <Button disabled={loading} className='w-100' variant='danger' >Delete Plant</Button>
+                    <Button disabled={loading} className='w-100' variant='danger' onClick={() => handleDeletePlant(plantData.id)}>Delete Plant</Button>
 
                 </Form>
             </Card.Body>
