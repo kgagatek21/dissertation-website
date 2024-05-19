@@ -156,7 +156,7 @@ export default function AddPlant() {
                             aria-label="Default select example"
                             ref={customScheduleRef}
                             >
-                            <option>Select Frequency</option>
+                            <option>Automated Irrigation</option>
                             <option value="1">Once a day</option>
                             <option value="2">Once a week</option>
                             <option value="3">Once every two weeks</option>

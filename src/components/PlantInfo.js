@@ -124,6 +124,9 @@ export default function PlantInfo() {
                     <Form.Group id='added-on'>
                         <Form.Label className='mb-3'>Added on: {date + " " + atTime}</Form.Label>
                     </Form.Group>
+                    <Form.Group >
+                        <Form.Label className='mb-3'>Irrigation Schedule: {plantData.isCustomSchedule}</Form.Label>
+                    </Form.Group>
                     <Form.Group id='enviroment-factors'>
                         <Form.Label className='mb-3'>Air Temperature: {airTemp}</Form.Label>
                     </Form.Group>
