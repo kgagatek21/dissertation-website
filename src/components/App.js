@@ -13,6 +13,7 @@ import Account from "./Account";
 import Menu from "./Menu"
 import Navbar from "./NavbarComp";
 import AddPlant from "./AddPlant";
+import PlantInfo from "./PlantInfo";
 
 function App() {
   return (
@@ -41,6 +42,9 @@ function App() {
                   </Route>
                   <Route exact path='/add-plant' element={<PrivateRoute/>}>
                     <Route exact path='/add-plant' element={<AddPlant/>}/>
+                  </Route>
+                  <Route exact path='/plant-info' element={<PrivateRoute/>}>
+                    <Route exact path='/plant-info' element={<PlantInfo/>}/>
                   </Route>
                   <Route path="/login" element={<Login/>} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />

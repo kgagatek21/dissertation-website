@@ -3,14 +3,18 @@ import { Alert, Button, Card, CardGroup } from 'react-bootstrap'
 import NavbarComp from './NavbarComp'
 import { useFirestore } from '../contexts/FirestoreContext'
 import { useAuth } from '../contexts/AuthContext'
+import { useNavigate } from "react-router-dom"
 import { json } from 'react-router-dom'
 
 export default function Dashboard() {
   const [plants, setPlants] = useState([])
-  const [plantType, setPlantType] = useState('')
+  const [currentPlant, setCurrentPlant] = useState('')
 
   const { getPlants, getPlantType, fethPlantTypes } = useFirestore()
   const { currentUser } = useAuth()
+
+  const navigate = useNavigate()
+
 
   useEffect(() => {
       const fetchData = async () => {
@@ -28,6 +32,14 @@ export default function Dashboard() {
 
   }, []);
 
+  function handleClick(plantData){
+    navigate("/plant-info", {state: plantData})
+  }
+
+  // const handleClick = () => {
+
+  // }
+
   return (
     <>
       <NavbarComp />
@@ -41,7 +53,7 @@ export default function Dashboard() {
                 <Card.Body>
                   <Card.Title>{plant.name}</Card.Title>
                   <Card.Text>{plant.description}</Card.Text>
-                  <Button variant="primary">Settings</Button>
+                  <Button variant="primary" onClick={ () => handleClick(plant)}>Settings</Button>
                 </Card.Body>
               </Card>
             </CardGroup>
