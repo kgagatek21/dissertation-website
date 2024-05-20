@@ -106,7 +106,7 @@ export default function AddPlant() {
                 console.log(err.message)
             })
         
-            setMessage('Success, redirecting to dashboard')
+            setMessage('Success')
             // navigate("/dashboard")
                
         } catch (err) {

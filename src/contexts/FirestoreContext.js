@@ -10,7 +10,8 @@ import {
     getDocs,
     query, 
     where,
-    deleteDoc
+    deleteDoc,
+    updateDoc
 }from 'firebase/firestore';
 import{ 
     ref,
@@ -89,6 +90,13 @@ export function FirestoreProvider({ children }) {
     const docRef = doc(db, 'plants', plantID)
     return deleteDoc(docRef)
   }
+
+  function triggerIrrigation(plantID) {
+    const docRef = doc(db, 'plants', plantID)
+    return updateDoc(docRef, {
+        irrigationTrigger: true
+    })
+  }
   
 
   const value = { 
@@ -97,7 +105,8 @@ export function FirestoreProvider({ children }) {
     getPlants,
     getPlantType,
     uploadStorageImg,
-    deletePlant
+    deletePlant,
+    triggerIrrigation
   }
     return (
     <FirestoreContext.Provider value={value}>
