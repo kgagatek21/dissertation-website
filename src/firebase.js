@@ -3,6 +3,9 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import 'firebase/messaging'
+import { getMessaging } from "firebase/messaging";
+
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -32,3 +35,5 @@ export const auth = getAuth()
 
 // Get a reference to the storage service, which is used to create references in your storage bucket
 export const storage = getStorage();
+
+export const messaging = getMessaging();
